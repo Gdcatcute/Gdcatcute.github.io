@@ -1,0 +1,8 @@
+Origin: Gdcatcute
+Label: Gdcatcute
+Suite: stable
+Version: 1.0
+Codename: ios
+Architectures: iphoneos-armv7
+Components: main
+Description: My personal iOS tweaks repository!
