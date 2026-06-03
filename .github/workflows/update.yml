@@ -1,0 +1,35 @@
+name: Update Cydia Repo
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+
+      - name: Install dpkg and bzip2
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y dpkg-dev bzip2
+
+      - name: Build Packages files
+        run: |
+          dpkg-scanpackages -m ./debs > Packages
+          bzip2 -c9 Packages > Packages.bz2
+
+      - name: Commit and Push
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git add Packages Packages.bz2
+          git commit -m "Auto-generated Packages" || echo "No changes to commit"
+          git push
